@@ -260,7 +260,7 @@ Small note at bottom:
 
 **Script:**
 
-“So this slide is meant for any networking snobs in the audience, I don't fully understand any of this, but...
+“For completeness, here’s a quick overview for the networking enthusiasts...
 Between an MCP client and server, all communication is via **JSON-RPC** messages, but the actual **transport** can differ.
 
 There are two standardized transports:
@@ -653,9 +653,46 @@ Again, the pattern is the same:
 
 ## Slide 9 - Code Execution with MCP (Anthropic Update)
 
-A warning I should mention, which applies to anyone who will be building their own MCP hosts. One moth back, Anthropic, the creators of Claude and MCP wrote a blog post, where they said that the way we currently use MCP, is not ideal, because with every prompt, we also include thousands of tool definitions, 
+**On-slide content:**
 
-TODO
+A simple “Problem → Solution” graphic.
+
+- **Problem:**  
+  - *Tool soup*: thousands of tool definitions load into the model’s context:contentReference[oaicite:23]{index=23}.  
+  - *Result bloat*: large intermediate results (e.g. long transcripts or spreadsheets) flow through the model:contentReference[oaicite:24]{index=24}.  
+  - These patterns increase latency and token costs.
+
+- **Proposed solution (Anthropic)**: *Code execution with MCP*:contentReference[oaicite:25]{index=25}.  
+  - Treat MCP servers as code libraries; let the agent write code that imports only the tools it needs:contentReference[oaicite:26]{index=26}.  
+  - Process large data inside the execution environment and return only summaries or filtered results:contentReference[oaicite:27]{index=27}.  
+  - Reduces token usage dramatically (e.g. from ~150,000 tokens to ~2,000 tokens):contentReference[oaicite:28]{index=28}.  
+  - Keeps sensitive data within the code runtime; results are tokenized before being exposed.
+
+- **Trade‑offs:**  
+  - Requires a secure sandbox and careful resource limits:contentReference[oaicite:30]{index=30}.  
+  - More complex to implement than direct tool calls.
+
+Include a link or footnote: *“See Anthropic’s blog for details.”*
+
+**Script:**
+
+“A quick heads‑up for those of you planning to build large‑scale MCP hosts.  Anthropic—the creators of MCP—recently published an article titled **‘Code execution with MCP: building more efficient agents’**.  They observed that as people connected agents to hundreds or thousands of MCP tools, two things happened:
+
+1. **Tool definition overload:**  Every tool’s schema is loaded into the model’s context.  When you have thousands of tools, these definitions alone can consume hundreds of thousands of tokens:contentReference[oaicite:31]{index=31}.
+2. **Intermediate result bloat:**  Each tool call returns data back through the model.  A two‑hour meeting transcript or a 10,000‑row spreadsheet might have to pass through the context multiple times:contentReference[oaicite:32]{index=32}.
+
+Both issues cause latency and cost to skyrocket.
+
+Anthropic proposes a solution they call **code execution with MCP**:contentReference[oaicite:33]{index=33}.  Instead of letting the model call tools directly, you provide the agent with a *code execution environment* (e.g. a Python or TypeScript runtime) that exposes MCP tools as imported functions.  The agent writes code to:
+
+- **Import only the tools it needs** from a virtual filesystem of servers and tools:contentReference[oaicite:34]{index=34}.
+- **Process data inside the runtime**—filter, aggregate or transform large results—before sending a compact summary back:contentReference[oaicite:35]{index=35}.  
+- Use loops, conditionals, and reusable functions to orchestrate complex workflows in a single execution step:contentReference[oaicite:36]{index=36}.
+
+In their example, this approach reduced token usage from roughly **150 k tokens to about 2 k tokens**, a ~98 % reduction:contentReference[oaicite:37]{index=37}.  It also offers privacy benefits: sensitive data can stay in the execution environment and be tokenized before the model sees it.  Additionally, the runtime can persist state and reuse code across sessions:contentReference[oaicite:39]{index=39}.
+
+The catch is that **code execution is more complex**.  You need a secure sandbox, resource limits and monitoring:contentReference[oaicite:40]{index=40}.  For simple demos and smaller projects, direct MCP tool calls are fine.  If you’re building enterprise‑scale agents or connecting to thousands of tools, it’s worth exploring this pattern.  For a deeper dive, check out Anthropic’s blog post and the accompanying videos.”
+
 
 <!-- ## Slide 9 – 
 
