@@ -54,7 +54,7 @@ def get_weather(lat: float, long: float):
 
 # %%
 chat = client.chats.create(
-    model="gemini-2.0-flash-lite",
+    model="gemini-2.0-flash",
     config=GenerateContentConfig(
         tools=[get_weather, get_long_lat],
         system_instruction=(
