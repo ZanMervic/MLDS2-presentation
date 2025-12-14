@@ -23,11 +23,13 @@ MCP was proposed to address exactly this kind of fragmentation by standardizing 
 
 “So, what exactly is MCP?
 
-The definition provided by the creators of MCP is that, **MCP (Model Context Protocol)** is an open-source standard for connecting AI applications to external systems. It defines a client–server protocol so an AI app can discover and call tools / fetch resources from a system through an MCP server, without needing a custom integration for each app. It was created by Anthropic (the company behind Claude) and now adopted by others like OpenAI, Google, Microsoft, IBM and more. So basically every major player in the AI space.
+The definition provided by the creators of MCP is that, **MCP (Model Context Protocol)** is an open-source standard for connecting AI applications to external systems. 
+<!-- It defines a client–server protocol so an AI app can discover and call tools / fetch resources from a system through an MCP server, without needing a custom integration for each app.  -->
+It was created by Anthropic (the company behind Claude) and now adopted by others like OpenAI, Google, Microsoft, IBM and more. So basically every major player in the AI space.
 
 The commonly used analogy, which you will se in most articles and videos about MCP is that mcp is like a **USB-C port for AI applications**.
 
-So just like USB-C gives your devices one consistent way to connect, MCP gives AI apps one consistent way to connect AI applications to external systems.
+So just like USB-C gives your devices one consistent way to connect, MCP gives AI apps one consistent way to connect to external systems.
 
 One **Important note** here, which doesn't get mentioned enough and can thus be the source of misconception, MCP does **not** give LLMs any capabilities they didn’t have already.
 
@@ -60,23 +62,19 @@ So, MCP follows a **host–client–server architecture**.
 - It does three important jobs:
 
   - It runs and talks to the model and manages the conversation.
-  - It manages the **MCP clients**.
+  - It manages the **MCP clients** (we will hear what these are in a second)
   - It aggregates context, by collecting the outputs from different servers and feeding them back to the model.
   - And it enforcess permissions and security by deciding which servers and tools are allowed to run, which tools need user approval to be used and what data is allowed to be sent out, as we don't want to send the entire chat or sensitive information to some random server.
 
 - Then there are **MCP clients** which are components inside the host. Each client:
 
   - connects to exactly one MCP server, so if we want to connect to multiple MCP servers, the host spins up multiple clients.
-  - negotiates capabilities by asking the server about what it can do and provides that to the host.
+  - negotiates capabilities by asking the server about what it can do and provides that to the host (this step happens as soon as we connect to a new server, which needs to announce to the client which capabilities it has, their descriptions and how to use them. This than gets passed to the host, which includes it in the context of the AI agent.)
   - and handles back and forth messages when the host wants to use something.
 
 - And finally the **MCP server** is where the integration lives:
   - It's a small service, which wraps something like a filesystem, a database, an API and exposes it in an MCP way.
   - It can run locally, on the same machine as the host or remotely as a hosted service.
-
-So when the model ‘calls a tool’, it’s actually going:
-**LLM inside host → MCP client → MCP server → real system**,
-and back again. The host never exposes the full conversation to the server; it only sends what’s needed.”
 
 ---
 
@@ -220,9 +218,8 @@ So here we have our simple AI Agent using tooling from earlier:
 **Here I show a screenshot of the Simple AI agent with tooling implementation**
 The whole implementation (without the tool implementation) is about 25 lines of code.
 
-However, to use an MCP server with our custom agent, that agent needs to behave as an MCP host and include an MCP client to connect to the server. For multiple servers, the host creates one client per server and manages them. There are tutorials on how to build your own MCP host on the official MCP site, but it's quite complex.
 **Here I show a screenshot of the more Complex AI agent with MCP**
-So as the implementation doesn't actually fit on the slide, that is because it's around 165 lines of code.
+However, to use an MCP server with our custom agent, that agent needs to behave as an MCP host and include an MCP client to connect to the server. Now I couldn't fit the entire implementation on the screen, but it's quite a bit more complex and it takes around 165 lines of code. There are tutorials on how to build your own MCP host on the official MCP site, but it's quite complex.
 
 From this you can see that perhaps we shouldn't use MCP everywhere. For smaller projects with AI agents like the one Sebastijan showed you, it's actually easier to just use the tools like we did before instead of MCP.
 
