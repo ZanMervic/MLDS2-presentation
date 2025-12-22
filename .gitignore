@@ -1,1 +1,4 @@
 .env
+*.pptx
+__pycache__/
+*.log

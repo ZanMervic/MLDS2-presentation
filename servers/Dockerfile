@@ -39,6 +39,23 @@ ENTRYPOINT ["python", "/app/mcp_server.py"]
 #   }
 # }
 
+# 2) # 1) Add a new entry in the mcp_config.json file of your MCP host:
+
+# {
+#   "mcpServers": {
+#     "dice-docker": {
+#       "command": "docker",
+#       "args": [
+#         "run",
+#         "--rm",
+#         "-i",
+#         "dice-mcp-server"
+#       ],
+#       "env": {}
+#     }
+#   }
+# }
+
 # 2) Create a custom catalog in Docker
 # This way, the server will be accessible just like any other MCP server in the catalog.
 

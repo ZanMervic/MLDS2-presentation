@@ -274,6 +274,6 @@ Anthropic proposes a solution they call **code execution with MCP**. Instead of 
 - **Process data inside the runtime**—filter, aggregate or transform large results—before sending a compact summary back.
 - Use loops, conditionals, and reusable functions to orchestrate complex workflows in a single execution step.
 
-In their example, this approach reduced token usage from roughly **150 k tokens to about 2 k tokens**, a ~98 % reduction. It also offers privacy benefits: sensitive data can stay in the execution environment and be tokenized before the model sees it.
+In their example, this approach reduced token usage from roughly **150 k tokens to about 2 k tokens**, a ~98 % reduction.
 
-The catch is that **code execution is more complex**. You need a secure sandbox, resource limits and monitoring. For simple demos and smaller projects, direct MCP tool calls are fine. If you’re building enterprise‑scale agents or connecting to thousands of tools, it’s worth exploring this pattern. For a deeper dive, check out Anthropic’s blog post and the accompanying videos.”
+The catch is that **code execution is more complex**. You need a secure sandbox, resource limits and monitoring. So here we have another layer to what we learned. If we just plan on using simple AI agents with a handful of tools, the approach Sebastijan showed you earlier, without MCP, is the easiest. If we need to scale to dozens or hundreds of tools, MCP is the way to go. And if we want to scale to thousands of tools and large data, code execution with MCP is worth exploring. For a deeper dive, check out Anthropic’s blog post and the accompanying videos.”
